@@ -1,0 +1,31 @@
+services:
+
+   redis:
+      image: redis
+
+   db:
+      image: postgres:9.4
+      environment:
+      # - POSTGRES_HOST_AUTH_METHOD=trust
+         POSTGRES_USERNAME: postgres
+         POSTGRES_PASSWORD: postgres
+
+   vote:
+      image: voting-app
+      ports:
+         - 8085:80
+      links:
+         - redis
+
+   worker:
+      image: workapp
+      links:
+         - db
+         - redis
+
+   result:
+      image: resultapp
+      ports:
+         - 8086:80
+      links:
+         - db
